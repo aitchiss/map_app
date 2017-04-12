@@ -6,6 +6,7 @@ app = function(){
     var country = JSON.parse(selectionJson)[0]
     populateCountryInfo(country)
   }
+
   
 
   makeRequest(url, requestComplete) 
@@ -47,13 +48,53 @@ var populateCountryInfo = function(country){
   div.appendChild(population)
   div.appendChild(capital)
 
+  var neighbours = document.createElement('div')
+  neighbours.classList.add('neighbouring-countries')
+
+  var neighboursTitle = document.createElement('h3')
+  neighboursTitle.innerText = 'Neighbouring Countries:'
+  neighbours.appendChild(neighboursTitle)
+
+  div.appendChild(neighbours)
+
+  var neighboursArray = country.borders
+
+  neighboursArray.forEach(function(countryCode){
+    var url = 'https://restcountries.eu/rest/v2/alpha/' + countryCode
+    makeRequest(url, requestCompleteNeighbours) 
+  })
+}
+
+var requestCompleteNeighbours = function(){
+  var jsonString = this.responseText
+
+  var country = JSON.parse(jsonString)
+  populateNeighbourInfo(country)
+}
+
+var populateNeighbourInfo = function(country){
+  var neighbouringCountriesDiv = document.querySelector('.neighbouring-countries')
+
+  var countryDiv = document.createElement('div')
+
+  var name = document.createElement('p')
+  var population = document.createElement('p')
+  var capital = document.createElement('p')
+
+  name.innerText = 'Name: ' + country.name
+  population.innerText = 'Population: ' + country.population
+  capital.innerText = 'Capital: ' + country.capital
+
+  countryDiv.appendChild(name)
+  countryDiv.appendChild(population)
+  countryDiv.appendChild(capital)
+  neighbouringCountriesDiv.appendChild(countryDiv)
 }
 
 var requestComplete = function(){
   if (this.status !== 200) return
   var jsonString = this.responseText
   var countries = JSON.parse(jsonString)
-  console.log(countries)
   populateSelectMenu(countries)
 }
 
@@ -71,7 +112,6 @@ var populateSelectMenu = function(countryArray){
     option.innerText = country.name
 
     if(country.name === savedCountry.name){
-      console.log('match')
       option.selected = 'selected'
     }
 
