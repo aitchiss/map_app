@@ -2,11 +2,15 @@
 <html>
 <head>
   <title>Countries Lab</title>
+  <script src='https://maps.googleapis.com/maps/api/js'></script>
+  <script src='MapWrapper.js'></script>
   <script src='app.js'></script>
   <link rel='stylesheet' type='text/css' href='style.css' >
 </head>
 <body>
-<h1>Countries</h1>
+<h1>Countries!</h1>
+<div id='map'></div>
+<div class="select-items">
 <select id='region-list'>
   <option value='all'>All</option>
   <option value='africa'>Africa</option>
@@ -17,8 +21,10 @@
 </select>
 <select id='country-list'>
 </select>
-
+</div>
 <div id='country-info'></div>
+
+
 
 </body>
 </html>
