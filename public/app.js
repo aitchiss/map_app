@@ -1,14 +1,29 @@
 app = function(){
   var countryList = document.querySelector('#country-list')
+  var regionList = document.querySelector('#region-list')
+  regionList.onchange = handleRegionListChange
+
   var url = 'https://restcountries.eu/rest/v2'
   var selectionJson = localStorage.getItem('selection')
   if (selectionJson){
     var country = JSON.parse(selectionJson)[0]
     populateCountryInfo(country)
   }
+  console.log(country)
 
   makeRequest(url, requestComplete) 
   countryList.onchange = handleCountryListChange
+}
+
+var handleRegionListChange = function(){
+  var selectedRegion = this.value
+
+  if (selectedRegion === 'all'){
+    var url = 'https://restcountries.eu/rest/v2'
+  } else {
+    var url = 'https://restcountries.eu/rest/v2/region/' + selectedRegion
+  }
+  makeRequest(url, requestComplete)
 }
 
 var handleCountryListChange = function(){
@@ -90,6 +105,9 @@ var requestComplete = function(){
 
 var populateSelectMenu = function(countryArray){
   var countryList = document.querySelector('#country-list')
+  while (countryList.hasChildNodes()){
+    countryList.removeChild(countryList.firstChild)
+  }
 
   var selectionJson = localStorage.getItem('selection')
     if (selectionJson){
