@@ -7,10 +7,7 @@ app = function(){
     populateCountryInfo(country)
   }
 
-  
-
   makeRequest(url, requestComplete) 
-
   countryList.onchange = handleCountryListChange
 }
 
@@ -29,12 +26,10 @@ var requestCompleteSingleCountry = function(){
   populateCountryInfo(country)
 }
 
-var populateCountryInfo = function(country){
+var populateCountryDiv = function(div, country){
   var name = document.createElement('p')
   var population = document.createElement('p')
   var capital = document.createElement('p')
-
-  var div = document.querySelector('#country-info')
 
   while(div.hasChildNodes()){
     div.removeChild(div.firstChild)
@@ -47,6 +42,11 @@ var populateCountryInfo = function(country){
   div.appendChild(name)
   div.appendChild(population)
   div.appendChild(capital)
+}
+
+var populateCountryInfo = function(country){
+  var div = document.querySelector('#country-info')
+  populateCountryDiv(div, country)
 
   var neighbours = document.createElement('div')
   neighbours.classList.add('neighbouring-countries')
@@ -76,18 +76,8 @@ var populateNeighbourInfo = function(country){
   var neighbouringCountriesDiv = document.querySelector('.neighbouring-countries')
 
   var countryDiv = document.createElement('div')
+  populateCountryDiv(countryDiv, country)
 
-  var name = document.createElement('p')
-  var population = document.createElement('p')
-  var capital = document.createElement('p')
-
-  name.innerText = 'Name: ' + country.name
-  population.innerText = 'Population: ' + country.population
-  capital.innerText = 'Capital: ' + country.capital
-
-  countryDiv.appendChild(name)
-  countryDiv.appendChild(population)
-  countryDiv.appendChild(capital)
   neighbouringCountriesDiv.appendChild(countryDiv)
 }
 
@@ -105,7 +95,6 @@ var populateSelectMenu = function(countryArray){
     if (selectionJson){
       var savedCountry = JSON.parse(selectionJson)[0]
     }
-
 
   countryArray.forEach(function(country){
     var option = document.createElement('option')
