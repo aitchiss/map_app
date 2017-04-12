@@ -2,7 +2,6 @@ app = function(){
   var countryList = document.querySelector('#country-list')
   var url = 'https://restcountries.eu/rest/v2'
   var selectionJson = localStorage.getItem('selection')
-  console.log(selectionJson)
   if (selectionJson){
     var country = JSON.parse(selectionJson)[0]
     populateCountryInfo(country)
@@ -36,6 +35,10 @@ var populateCountryInfo = function(country){
 
   var div = document.querySelector('#country-info')
 
+  while(div.hasChildNodes()){
+    div.removeChild(div.firstChild)
+  }
+
   name.innerText = 'Name: ' + country.name
   population.innerText = 'Population: ' + country.population
   capital.innerText = 'Capital: ' + country.capital
@@ -57,9 +60,21 @@ var requestComplete = function(){
 var populateSelectMenu = function(countryArray){
   var countryList = document.querySelector('#country-list')
 
+  var selectionJson = localStorage.getItem('selection')
+    if (selectionJson){
+      var savedCountry = JSON.parse(selectionJson)[0]
+    }
+
+
   countryArray.forEach(function(country){
     var option = document.createElement('option')
     option.innerText = country.name
+
+    if(country.name === savedCountry.name){
+      console.log('match')
+      option.selected = 'selected'
+    }
+
     countryList.appendChild(option)
   })
 }
